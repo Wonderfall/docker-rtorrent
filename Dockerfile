@@ -4,6 +4,10 @@ ARG RTORRENT_VERSION=0.9.8-r15
 ARG UNRAR_VERSION=6.1.6
 ARG FINDUTILS_VERSION=4.9.0
 
+# Checksums (must be changed for each version version)
+ARG UNRAR_CHECKSUM=67f4ab891c062218c2badfaac9c8cab5c8bfd5e96dabfca56c8faa3d209a801d
+ARG FINDUTILS_CHECKSUM=a2bfb8c09d436770edc59f50fa483e785b161a3b7b9d547573cb08065fd462fe
+
 
 # Build rTorrent
 FROM alpine:${ALPINE_VERSION} as build-rtorrent
@@ -30,9 +34,12 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/a
 FROM alpine:${ALPINE_VERSION} as build-unrar
 
 ARG UNRAR_VERSION
+ARG UNRAR_CHECKSUM
 
 RUN apk --no-cache add make g++ \
  && wget -q -O /tmp/unrar.tar.gz https://www.rarlab.com/rar/unrarsrc-${UNRAR_VERSION}.tar.gz \
+ && CHECKSUM_STATE=$(echo -n $(echo "${UNRAR_CHECKSUM}  /tmp/unrar.tar.gz" | sha256sum -c) | tail -c 2) \
+ && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Error: checksum does not match" && exit 1; fi \
  && cd /tmp && tar xzf unrar.tar.gz && cd unrar \
  && sed -i -e 's/LDFLAGS=-pthread/LDFLAGS=-static -pthread/g' makefile \
  && make
@@ -42,9 +49,12 @@ RUN apk --no-cache add make g++ \
 FROM alpine:${ALPINE_VERSION} as build-find
 
 ARG FINDUTILS_VERSION
+ARG FINDUTILS_CHECKSUM
 
 RUN apk --no-cache add build-base \
  && wget -q -O /tmp/find.tar.xz https://ftp.gnu.org/gnu/findutils/findutils-${FINDUTILS_VERSION}.tar.xz \
+ && CHECKSUM_STATE=$(echo -n $(echo "${FINDUTILS_CHECKSUM}  /tmp/find.tar.xz" | sha256sum -c) | tail -c 2) \
+ && if [ "${CHECKSUM_STATE}" != "OK" ]; then echo "Error: checksum does not match" && exit 1; fi \
  && cd /tmp && mkdir find && tar xf find.tar.xz -C find --strip-components 1 && cd find \
  && ./configure LDFLAGS="-static" \
  && make
