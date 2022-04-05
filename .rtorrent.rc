@@ -1,0 +1,59 @@
+# rTorrent runtime directories
+method.insert = cfg.basedir,  private|const|string, (cat,(fs.homedir),"/.local/share/rtorrent/")
+method.insert = cfg.download, private|const|string, (cat,(cfg.basedir),"download/")
+method.insert = cfg.logs,     private|const|string, (cat,(cfg.basedir),"log/")
+method.insert = cfg.logfile,  private|const|string, (cat,(cfg.logs),"rtorrent-",(system.time),".log")
+method.insert = cfg.session,  private|const|string, (cat,(cfg.basedir),".session/")
+method.insert = cfg.watch,    private|const|string, (cat,(cfg.basedir),"watch/")
+
+# Create directories if absent
+fs.mkdir.recursive = (cat,(cfg.basedir))
+fs.mkdir = (cat,(cfg.download))
+fs.mkdir = (cat,(cfg.logs))
+fs.mkdir = (cat,(cfg.session))
+fs.mkdir = (cat,(cfg.watch))
+fs.mkdir = (cat,(cfg.watch),"/load")
+fs.mkdir = (cat,(cfg.watch),"/start")
+
+# Drop to "$(cfg.watch)/load" to add torrent
+schedule2 = watch_load, 11, 10, ((load.verbose, (cat, (cfg.watch), "load/*.torrent")))
+
+# Drop to "$(cfg.watch)/start" to add torrent and start downloading
+schedule2 = watch_start, 10, 10, ((load.start_verbose, (cat, (cfg.watch), "start/*.torrent")))
+
+# Base settings
+network.max_open_files.set = 600
+network.max_open_sockets.set = 300
+pieces.memory.max.set = 1800M
+session.path.set = (cat, (cfg.session))
+directory.default.set = (cat, (cfg.download))
+log.execute = (cat, (cfg.logs), "execute.log")
+system.umask.set = 0022
+system.cwd.set = (directory.default)
+
+## Listen to port 5000 (socket doesn't work with gVisor)
+scgi_port=0.0.0.0:5000
+
+## Run the rTorrent process as a daemon in the background
+system.daemon.set = true
+
+## Custom configuration
+encoding_list = UTF-8
+port_range = 49184-49184
+port_random = no
+check_hash = no
+encryption = allow_incoming, try_outgoing, enable_retry
+trackers.use_udp.set = yes
+dht.mode.set = disable
+protocol.pex.set = no
+
+min_peers = 1
+max_peers = 100
+min_peers_seed = 1
+max_peers_seed = 50
+max_uploads = 15
+
+network.xmlrpc.size_limit.set = 10000000
+
+# Automatically unpack RAR downloads
+method.set_key=event.download.finished,unrar,"execute={/usr/local/bin/rtunrar,$d.base_path=}"
