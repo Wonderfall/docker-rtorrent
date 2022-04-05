@@ -1,5 +1,7 @@
 # docker-rtorrent
-Distroless Docker/OCI image of jesec's rtorrent with unrar tools.
+
+<p align="center"><a target="_blank"><img height="128" src="https://raw.githubusercontent.com/wonderfall/docker-rtorrent/main/.github/assets/docker-rtorrent.png"></a></p>
+<p align="center"><i>Distroless Docker/OCI image of jesec's rtorrent with unrar tools.</i></p>
 
 ## Why?
 The existing images don't provide a way to automatically unpack RAR releases, and if we're using distroless, we have to statically build a bunch of things.
