@@ -31,8 +31,11 @@ log.execute = (cat, (cfg.logs), "execute.log")
 system.umask.set = 0022
 system.cwd.set = (directory.default)
 
+## Use unix socket (comment if you're using the following port approach)
+network.scgi.open_local = (cat,(cfg.basedir),rtorrent.sock)
+
 ## Listen to port 5000 (socket doesn't work with gVisor)
-scgi_port=0.0.0.0:5000
+#scgi_port=0.0.0.0:5000
 
 ## Run the rTorrent process as a daemon in the background
 system.daemon.set = true
