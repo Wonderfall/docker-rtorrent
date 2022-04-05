@@ -6,7 +6,9 @@ ARG FINDUTILS_VERSION=4.9.0
 
 
 # Build rTorrent
-FROM alpine:edge as build-rtorrent
+FROM alpine:${ALPINE_VERSION} as build-rtorrent
+
+ARG RTORRENT_VERSION
 
 RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk --no-cache add \
@@ -25,7 +27,9 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/a
 
 
 # Build unrar
-FROM alpine:edge as build-unrar
+FROM alpine:${ALPINE_VERSION} as build-unrar
+
+ARG UNRAR_VERSION
 
 RUN apk --no-cache add make g++ \
  && wget -q -O /tmp/unrar.tar.gz https://www.rarlab.com/rar/unrarsrc-${UNRAR_VERSION}.tar.gz \
@@ -35,7 +39,9 @@ RUN apk --no-cache add make g++ \
 
 
 # Build find
-FROM alpine:edge as build-find
+FROM alpine:${ALPINE_VERSION} as build-find
+
+ARG FINDUTILS_VERSION
 
 RUN apk --no-cache add build-base \
  && wget -q -O /tmp/find.tar.xz https://ftp.gnu.org/gnu/findutils/findutils-${FINDUTILS_VERSION}.tar.xz \
