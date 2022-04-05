@@ -31,7 +31,7 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/a
     python3 \
     gnupg \
  && git clone --depth 1 --branch v${RTORRENT_VERSION} https://github.com/jesec/rtorrent/ && cd rtorrent \
- && git --recv-keys ${RTORRENT_GPG} && git verify-tag $(git describe --tags) \
+ && gpg --recv-keys ${RTORRENT_GPG} && git verify-tag $(git describe --tags) \
  && sed -i 's/architecture = \"all\"/architecture = \"amd64\"/' BUILD.bazel \
  && bazel build rtorrent --features=fully_static_link --verbose_failures
 
