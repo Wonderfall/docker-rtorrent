@@ -8,11 +8,15 @@ ARG FINDUTILS_VERSION=4.9.0
 ARG UNRAR_CHECKSUM=67f4ab891c062218c2badfaac9c8cab5c8bfd5e96dabfca56c8faa3d209a801d
 ARG FINDUTILS_CHECKSUM=a2bfb8c09d436770edc59f50fa483e785b161a3b7b9d547573cb08065fd462fe
 
+# GPG keys
+ARG RTORRENT_GPG=A102C2F15053B4F7
+
 
 # Build rTorrent
 FROM alpine:${ALPINE_VERSION} as build-rtorrent
 
 ARG RTORRENT_VERSION
+ARG RTORRENT_GPG
 
 RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
  && apk --no-cache add \
@@ -25,7 +29,9 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/a
     linux-headers \
     python2@testing \
     python3 \
+    gnupg \
  && git clone --depth 1 --branch v${RTORRENT_VERSION} https://github.com/jesec/rtorrent/ && cd rtorrent \
+ && git --recv-keys ${RTORRENT_GPG} && git verify-tag $(git describe --tags) \
  && sed -i 's/architecture = \"all\"/architecture = \"amd64\"/' BUILD.bazel \
  && bazel build rtorrent --features=fully_static_link --verbose_failures
 
