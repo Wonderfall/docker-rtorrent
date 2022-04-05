@@ -1,0 +1,49 @@
+networks:
+  rtorrent_network:
+
+services:
+  rtorrent:
+    image: ghcr.io/wonderfall/rtorrent:0.9.8
+    container_name: rtorrent
+    user: 1000:1000
+    cpus: 8
+    mem_limit: 14g
+    pids_limit: 1024
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    environment:
+      - HOME=/config
+    volumes:
+      - /path/to/rtorrent:/config
+      - /path/to/media/torrents:/data
+    ports:
+      - 49184:49184
+      - 49184:49184/udp
+    networks:
+      - rtorrent_network
+
+  flood:
+    image: jesec/flood:4.7.0
+    container_name: flood
+    user: 1000:1000
+    restart: unless-stopped
+    cpus: 2
+    mem_limit: 4g
+    pids_limit: 1024
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    command: --port 3000 --allowedpath /data/torrents
+    environment:
+      - HOME=/config
+    volumes:
+      - /path/to/rtorrent:/config
+      - /path/to/media/torrents:/data
+    networks:
+      - rtorrent_network
