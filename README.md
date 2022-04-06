@@ -18,7 +18,7 @@ docker pull ghcr.io/wonderfall/rtorrent:0.9.8
 Builds are also signed by [cosign](https://github.com/sigstore/cosign). To check the signature:
 
 ```
-COSIGN_EXPERIMENTAL=true cosign verify ghcr.io/wonderfall/nextcloud:0.9.8
+COSIGN_EXPERIMENTAL=true cosign verify ghcr.io/wonderfall/rtorrent:0.9.8
 ```
 
 You should read and adapt `.rtorrent.rc` to your needs (though it provides an already decent configuration), and put it in the volume that is indicated by the `HOME` environment variable. By default, `HOME` is `/config` and the image is running with UID/GID `1000`: that means you should create a directory on the host, put the configuration file there, and change permissions accordingly with `chown -R UID:GID /path/to/host/volume`.
