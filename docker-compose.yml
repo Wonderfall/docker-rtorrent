@@ -6,10 +6,10 @@ services:
     image: ghcr.io/wonderfall/rtorrent:0.9.8
     container_name: rtorrent
     user: 1000:1000
-    cpus: 8
-    mem_limit: 14g
-    pids_limit: 1024
     restart: unless-stopped
+    #cpus: 8
+    #mem_limit: 14g
+    #pids_limit: 1024
     read_only: true
     security_opt:
       - no-new-privileges:true
@@ -31,9 +31,9 @@ services:
     container_name: flood
     user: 1000:1000
     restart: unless-stopped
-    cpus: 2
-    mem_limit: 4g
-    pids_limit: 1024
+    #cpus: 2
+    #mem_limit: 4g
+    #pids_limit: 1024
     read_only: true
     security_opt:
       - no-new-privileges:true
