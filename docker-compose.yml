@@ -45,5 +45,7 @@ services:
     volumes:
       - /path/to/rtorrent:/config
       - /path/to/media/torrents:/data
+    #ports:
+    #  - 127.0.0.1:3000:3000
     networks:
       - rtorrent_network
