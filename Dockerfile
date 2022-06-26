@@ -27,7 +27,7 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/a
     gcompat \
     git \
     linux-headers \
-    python2@testing \
+    pythonispython3 \
     python3 \
     gnupg \
  && git clone --depth 1 --branch v${RTORRENT_VERSION} https://github.com/jesec/rtorrent/ && cd rtorrent \
