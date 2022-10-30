@@ -35,7 +35,7 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/a
  && TAG=$(git describe --tags) \
  && git verify-tag ${TAG} || { git verify-tag --raw "${TAG}" 2>&1 | grep EXPKEYSIG; } \
  && sed -i 's/architecture = \"all\"/architecture = \"amd64\"/' BUILD.bazel \
- && bazel build rtorrent --features=fully_static_link --verbose_failures --copt="-Wno-error=deprecated-declaration"
+ && bazel build rtorrent --features=fully_static_link --verbose_failures --copt="-Wno-error=deprecated-declarations"
 
 
 # Build unrar
