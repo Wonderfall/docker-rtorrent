@@ -1,7 +1,7 @@
 # Build-time variables
 ARG ALPINE_VERSION=edge
 ARG RTORRENT_VERSION=0.9.8-r16
-ARG UNRAR_VERSION=6.1.7
+ARG UNRAR_VERSION=6.2.1
 ARG FINDUTILS_VERSION=4.9.0
 
 # Checksums (must be changed for each version version)
