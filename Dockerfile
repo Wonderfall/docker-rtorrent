@@ -31,7 +31,9 @@ RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/a
     python3 \
     gnupg \
  && git clone --depth 1 --branch v${RTORRENT_VERSION} https://github.com/jesec/rtorrent/ && cd rtorrent \
- && gpg --recv-keys ${RTORRENT_GPG} && git verify-tag $(git describe --tags) \
+ && gpg --recv-keys ${RTORRENT_GPG} \
+ && TAG=$(git describe --tags) \
+ && git verify-tag ${TAG} || { git verify-tag --raw "${TAG}" 2>&1 | grep EXPKEYSIG; } \
  && sed -i 's/architecture = \"all\"/architecture = \"amd64\"/' BUILD.bazel \
  && bazel build rtorrent --features=fully_static_link --verbose_failures
 
