@@ -25,6 +25,15 @@ You should read and adapt `.rtorrent.rc` to your needs (though it provides an al
 
 Comment the last line if you don't want RARs to be unpacked, but then you should prefer [a more simple image](https://github.com/jesec/rtorrent).
 
+## Extending functionality
+You may want to use common tools such as `mv` or `mkdir` for automation purposes. Those aren't available by default, but can easily be added on top of the current image. For instance, you can write your own Dockerfile like this:
+
+```Dockerfile
+FROM ghcr.io/wonderfall/rtorrent
+COPY --from=gcr.io/distroless/static:debug /busybox/mv /bin/mv
+COPY --from=gcr.io/distroless/static:debug /busybox/mkdir /bin/mkdir
+```
+
 ## Security
 - The `Dockerfile` is defaulting to the non-privileged `1000:1000` user. It contains only the necessary dependencies thanks to the [distroless](https://github.com/GoogleContainerTools/distroless) project from Google. This results in a very small image with low attack surface.
 - The sample `docker-compose.yml` is optimized for security: the container filesystem will be read-only except of course for the mounted volumes. Furthermore, all capabilities are dropped since we don't need them and privilege escalation is made harder.
