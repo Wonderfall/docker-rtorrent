@@ -1,5 +1,7 @@
 # docker-rtorrent
 
+⚠️**Obsolete**: it has been a fun ride, albeit a short one. Flood and jesec's fork of rtorrent are not getting maintenance updates nowadays, so I decided to make the switch to qBittorrent. I still thank jesec for his work. Given this situation, I don't have an interest in maintaining this project anymore. Going forward, you are on your own if you want to keep using this image, or you can switch to something else. Take care!
+
 <p align="center"><a target="_blank"><img height="128" src="https://raw.githubusercontent.com/wonderfall/docker-rtorrent/main/.github/assets/docker-rtorrent.png"></a></p>
 <p align="center"><i>Distroless Docker/OCI image of jesec's rtorrent with unrar tools.</i></p>
 
